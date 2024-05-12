@@ -1,0 +1,303 @@
+definitions:
+  dto.CreateItemDTO:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      itemname:
+        type: string
+      notes:
+        type: string
+      password:
+        type: string
+      updated_at:
+        type: string
+      url:
+        type: string
+      username:
+        type: string
+      vaultname:
+        type: string
+    type: object
+  dto.CreateVaultDTO:
+    properties:
+      vaultname:
+        type: string
+    type: object
+  dto.GeneratePasswordDTO:
+    properties:
+      count:
+        type: integer
+      isNumbersIncluded:
+        type: boolean
+      isSymbolsIncluded:
+        type: boolean
+      isUppercaseIncluded:
+        type: boolean
+      length:
+        type: integer
+      passwordType:
+        type: string
+    type: object
+  dto.LoginDTO:
+    properties:
+      email:
+        minLength: 5
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  dto.UserDTO:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        minLength: 5
+        type: string
+      password:
+        minLength: 8
+        type: string
+      salt:
+        minLength: 8
+        type: string
+      updated_at:
+        type: string
+      username:
+        minLength: 5
+        type: string
+    required:
+    - email
+    - password
+    - salt
+    - username
+    type: object
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+host: localhost:8082
+info:
+  contact:
+    email: erickson.leynes@gmail.com
+    name: API Support(Erickson Leynes)
+  description: Password Management System - API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: MyK3y (Password Management System - API)
+  version: "1.0"
+paths:
+  /api/v1/item:
+    post:
+      consumes:
+      - application/json
+      description: Create Item
+      parameters:
+      - description: Create new Item
+        in: body
+        name: createItem
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateItemDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      security:
+      - Authentication: []
+      summary: Create Item
+      tags:
+      - Item
+  /api/v1/item/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Item By ID
+      parameters:
+      - description: Item search by ID
+        format: uuid
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      security:
+      - Authentication: []
+      summary: Get Item By ID
+      tags:
+      - Item
+  /api/v1/password:
+    post:
+      consumes:
+      - application/json
+      description: Generate Password
+      parameters:
+      - description: Generate new Password
+        in: body
+        name: GeneratePassword
+        required: true
+        schema:
+          $ref: '#/definitions/dto.GeneratePasswordDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      security:
+      - Authentication: []
+      summary: Generate Password
+      tags:
+      - Password
+  /api/v1/vault:
+    post:
+      consumes:
+      - application/json
+      description: Create Vault
+      parameters:
+      - description: Create new vault
+        in: body
+        name: createvault
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateVaultDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      security:
+      - Authentication: []
+      summary: Create Vault
+      tags:
+      - Vault
+  /api/v1/vault/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Vault By ID
+      parameters:
+      - description: vault search by ID
+        format: uuid
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      security:
+      - Authentication: []
+      summary: Get Vault By ID
+      tags:
+      - Vault
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: User Login
+      parameters:
+      - description: User Login
+        in: body
+        name: UserLogin
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      security:
+      - Authentication: []
+      summary: User Login
+      tags:
+      - User
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: User Registration
+      parameters:
+      - description: Register new User
+        in: body
+        name: UserRegistration
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      security:
+      - Authentication: []
+      summary: User Registration
+      tags:
+      - User
+securityDefinitions:
+  Authentication:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
